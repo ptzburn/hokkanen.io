@@ -5,7 +5,6 @@ import { auth } from "~/server/auth.ts";
 const PUBLIC_ROUTES = new Set([
   "/",
   "/auth/sign-in",
-  "/auth/sign-up",
   "/auth/forgot-password",
   "/auth/reset-password",
 ]);
