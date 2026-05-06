@@ -1,0 +1,15 @@
+[phases.setup]
+nixPkgs = ["curl", "unzip"]
+
+[phases.install]
+cmds = [
+  "curl -fsSL https://deno.land/install.sh | DENO_INSTALL=/usr/local sh -s v2.7.11 && /usr/local/bin/deno install"
+]
+
+[phases.build]
+cmds = [
+  "/usr/local/bin/deno task build"
+]
+
+[start]
+cmd = "/usr/local/bin/deno task start"

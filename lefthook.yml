@@ -1,0 +1,6 @@
+pre-commit:
+  parallel: true
+  jobs:
+    - run: deno fmt ./src/
+    - run: deno lint ./src/
+    - run: deno check ./src/

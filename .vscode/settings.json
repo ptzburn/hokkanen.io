@@ -1,0 +1,23 @@
+{
+  "deno.enable": true,
+  "deno.lint": true,
+  "deno.maxTsServerMemory": 8192,
+  "typescript.validate.enable": false,
+  "editor.defaultFormatter": "denoland.vscode-deno",
+  "[typescript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "denoland.vscode-deno"
+  },
+  "css.customData": [
+    ".vscode/tailwind.json"
+  ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "html.validate.styles": false,
+  "workbench.editor.customLabels.patterns": {
+    "**/routes/**/index.tsx": "${dirname} - Page"
+  }
+}

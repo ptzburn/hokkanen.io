@@ -1,0 +1,38 @@
+dist
+.wrangler
+.output
+.vercel
+.netlify
+.vite
+.nitro
+.claude
+vite.config.ts.timestamp-*.mjs
+
+# Environment
+.env
+.env.prod
+.env*.local
+
+# dependencies
+/node_modules
+/docker-data
+
+## Local DB
+local.db*
+src/api/db/migrations/
+
+# IDEs and editors
+/.idea
+.project
+.cursor/
+.classpath
+*.launch
+.settings/
+
+# Temp
+gitignore
+
+# System Files
+CLAUDE.md
+.DS_Store
+Thumbs.db
