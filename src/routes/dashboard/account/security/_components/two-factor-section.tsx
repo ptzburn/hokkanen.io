@@ -154,11 +154,19 @@ export function TwoFactorSection(): JSX.Element {
               <ErrorBoundary
                 fallback={null}
               >
-                <Suspense fallback={<Skeleton class="h-4 w-16" />}>
+                <Suspense
+                  fallback={
+                    <Skeleton as="span" class="inline-block h-4 w-16" />
+                  }
+                >
                   <Show when={numberOfBackupCodes()}>
-                    {numberOfBackupCodes()}{" "}
-                    backup codes remaining. Regenerate if you've lost or used
-                    your existing codes.
+                    {(count) => (
+                      <>
+                        {count()}{" "}
+                        backup codes remaining. Regenerate if you've lost or
+                        used your existing codes.
+                      </>
+                    )}
                   </Show>
                 </Suspense>
               </ErrorBoundary>
