@@ -1,7 +1,14 @@
+import type { Client } from "@libsql/client";
 import env from "~/env.ts";
 import { drizzle } from "drizzle-orm/libsql";
 import { relations } from "./relations.ts";
 import * as schema from "./schema/index.ts";
+
+const drizzleConfig = {
+  casing: "snake_case" as const,
+  schema,
+  relations,
+};
 
 const db = drizzle({
   connection: {
@@ -10,9 +17,13 @@ const db = drizzle({
       ? undefined
       : env.DATABASE_AUTH_TOKEN,
   },
-  casing: "snake_case",
-  schema,
-  relations,
+  ...drizzleConfig,
 });
+
+export type Db = typeof db;
+
+export function createDb(client: Client): Db {
+  return drizzle({ client, ...drizzleConfig });
+}
 
 export default db;

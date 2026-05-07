@@ -19,7 +19,6 @@ vite.config.ts.timestamp-*.mjs
 
 ## Local DB
 local.db*
-src/api/db/migrations/
 
 # IDEs and editors
 /.idea
