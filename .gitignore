@@ -20,6 +20,11 @@ vite.config.ts.timestamp-*.mjs
 ## Local DB
 local.db*
 
+## Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
 # IDEs and editors
 /.idea
 .project
