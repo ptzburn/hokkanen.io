@@ -7,7 +7,7 @@ import { toast } from "solid-sonner";
 
 function SignOutPage(): JSX.Element {
   const navigate = useNavigate();
-  const [isSigningOut, setIsSigningOut] = createSignal(true);
+  const [isSigningOut, setIsSigningOut] = createSignal(false);
 
   onMount(async () => {
     setIsSigningOut(true);
@@ -23,8 +23,6 @@ function SignOutPage(): JSX.Element {
         },
       },
     });
-
-    setIsSigningOut(false);
   });
 
   return (
