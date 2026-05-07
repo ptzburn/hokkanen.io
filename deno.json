@@ -2,6 +2,7 @@
   "nodeModulesDir": "manual",
   "tasks": {
     "dev:app": "deno run --allow-env --allow-sys --allow-ffi --env-file --allow-net --allow-read --allow-write --allow-run vite --port 3028",
+    "dev:e2e": "deno run --allow-env --allow-sys --allow-ffi --env-file=.env.e2e --allow-net --allow-read --allow-write --allow-run vite --port 3029",
     "build": "deno run --allow-env --allow-read --allow-sys --allow-run --allow-ffi --env-file=.env.prod --allow-write vite build",
     "dev": "concurrently \"deno task dev:app\" \"docker compose up\"",
     "start": "deno run --allow-net --allow-read --allow-write --allow-ffi --allow-env --env-file=.env.prod --allow-sys ./.output/server/index.mjs",
