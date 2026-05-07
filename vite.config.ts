@@ -1,18 +1,41 @@
-import { defineConfig } from "vite";
+/// <reference types="vitest/config" />
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import deno from "@deno/vite-plugin";
 import { solidStart } from "@solidjs/start/config";
 import { nitroV2Plugin as nitro } from "@solidjs/vite-plugin-nitro-2";
-import deno from "@deno/vite-plugin";
 import tailwindcss from "@tailwindcss/vite";
 import Icons from "unplugin-icons/vite";
 
-import "./src/env.ts";
+import { defineConfig } from "vite";
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   root: import.meta.dirname,
   cacheDir: "node_modules/.vite",
+  resolve: {
+    conditions: ["development", "browser"],
+    dedupe: ["@solidjs/router", "solid-js"],
+    alias: {
+      "~": path.resolve(__dirname, "src"),
+    },
+  },
   server: {
     watch: {
       ignored: ["**/local.db*", "**/docker-data/**"],
+    },
+  },
+  test: {
+    environment: "happy-dom",
+    globals: true,
+    fileParallelism: false,
+    setupFiles: ["./tests/setup.ts"],
+    include: ["src/**/*.test.{ts,tsx}"],
+    server: {
+      deps: {
+        inline: [/solid/, /kobalte/],
+      },
     },
   },
   build: {
