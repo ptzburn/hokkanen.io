@@ -1,4 +1,4 @@
-import { Turnstile } from "@nerimity/solid-turnstile";
+import { Turnstile, type TurnstileRef } from "@nerimity/solid-turnstile";
 import { Button } from "~/components/ui/button.tsx";
 import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 
@@ -22,6 +22,12 @@ type SignInFormProps = {
 export default function SignInForm(props: SignInFormProps): JSX.Element {
   const [turnstileToken, setTurnstileToken] = createSignal<string>();
   const [step, setStep] = createSignal<SignInStep>("credentials");
+  let turnstileRef: TurnstileRef | undefined;
+
+  const resetCaptcha = (): void => {
+    setTurnstileToken(undefined);
+    turnstileRef?.reset();
+  };
 
   const form = useAppForm(() => ({
     defaultValues: {
@@ -48,6 +54,7 @@ export default function SignInForm(props: SignInFormProps): JSX.Element {
           },
           onError: (ctx) => {
             toast.error(ctx.error.message || "An error occurred");
+            resetCaptcha();
           },
         },
       });
@@ -58,7 +65,10 @@ export default function SignInForm(props: SignInFormProps): JSX.Element {
     <Switch>
       <Match when={step() === "two-factor"}>
         <TwoFactorVerification
-          onBack={() => setStep("credentials")}
+          onBack={() => {
+            resetCaptcha();
+            setStep("credentials");
+          }}
         />
       </Match>
       <Match when={step() === "credentials"}>
@@ -82,8 +92,11 @@ export default function SignInForm(props: SignInFormProps): JSX.Element {
             </form.AppField>
             <div class="flex justify-center">
               <Turnstile
+                ref={(r) => (turnstileRef = r)}
                 sitekey={import.meta.env.VITE_TURNSTILE_SITE_KEY}
                 onVerify={setTurnstileToken}
+                onExpire={() => setTurnstileToken(undefined)}
+                onError={() => setTurnstileToken(undefined)}
                 autoResetOnExpire
               />
             </div>
