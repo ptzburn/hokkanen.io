@@ -21,7 +21,9 @@ function generateNonce(): string {
 function buildCsp(nonce: string): string {
   return [
     "default-src 'self'",
-    `script-src 'nonce-${nonce}' 'strict-dynamic'`,
+    // 'unsafe-eval' is required by seroval's runtime deserialization, which
+    // SolidStart 2.0 alpha hardcodes — there is no JSON-mode toggle yet.
+    `script-src 'nonce-${nonce}' 'strict-dynamic' 'unsafe-eval'`,
     "style-src 'self' 'unsafe-inline'",
     `img-src 'self' data: blob: ${S3_ORIGIN}`,
     "font-src 'self' data:",
