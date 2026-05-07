@@ -1,16 +1,20 @@
-import { useLocation } from "@solidjs/router";
+import { A, useLocation } from "@solidjs/router";
 import { Separator } from "~/components/ui/separator.tsx";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarTrigger,
   useSidebar,
 } from "~/components/ui/sidebar.tsx";
 import { AccountNav } from "~/routes/dashboard/_components/account-nav.tsx";
 import ChevronLeftIcon from "~icons/lucide/chevron-left";
 import ChevronRightIcon from "~icons/lucide/chevron-right";
+import Globe from "~icons/lucide/globe";
 import { createEffect, type JSX, on, Show } from "solid-js";
 import { NavMain } from "./nav-main.tsx";
 import { NavUser } from "./nav-user.tsx";
@@ -42,6 +46,16 @@ export function AppSidebar(): JSX.Element {
         </Show>
       </SidebarContent>
       <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <A href="/">
+              <SidebarMenuButton tooltip="View site">
+                <Globe />
+                <span>View site</span>
+              </SidebarMenuButton>
+            </A>
+          </SidebarMenuItem>
+        </SidebarMenu>
         <SidebarTrigger
           class={`hidden w-full md:flex ${
             sidebar.state() === "expanded" ? "justify-end" : "justify-center"

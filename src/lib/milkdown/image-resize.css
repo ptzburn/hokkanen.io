@@ -1,0 +1,98 @@
+.milkdown-image-resize {
+  position: relative;
+  margin: 1.5rem auto;
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.milkdown-image-resize.is-selected {
+  outline: 2px solid var(--color-primary, #3b82f6);
+  outline-offset: 2px;
+  border-radius: 0.5rem;
+}
+
+.milkdown-image-resize img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.milkdown-image-resize__popover {
+  position: absolute;
+  bottom: -2.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  background: var(--color-card, white);
+  border: 1px solid var(--color-border, rgb(0 0 0 / 0.1));
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.08);
+  z-index: 10;
+}
+
+.milkdown-image-resize.is-selected .milkdown-image-resize__popover {
+  display: flex;
+}
+
+.milkdown-image-resize__preset {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: 0.25rem 0.625rem;
+  border-radius: 0.375rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--color-foreground, inherit);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.12s ease;
+}
+
+.milkdown-image-resize__preset:hover {
+  background: var(--color-accent, rgb(0 0 0 / 0.05));
+}
+
+.milkdown-image-resize__preset.is-active {
+  background: var(--color-primary, #3b82f6);
+  color: var(--color-primary-foreground, white);
+}
+
+.milkdown-image-resize__caption-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 0.25rem;
+  padding: 0.25rem 0.4rem;
+  border-left: 1px solid var(--color-border, rgb(0 0 0 / 0.1));
+}
+
+.milkdown-image-resize__caption {
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.milkdown-image-resize__caption-input {
+  display: block;
+  width: 100%;
+  max-width: 32rem;
+  margin: 0 auto;
+  padding: 0.25rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed var(--color-border, rgb(0 0 0 / 0.15));
+  text-align: center;
+  font-size: 0.875rem;
+  font-style: italic;
+  color: var(--color-muted-foreground, rgb(0 0 0 / 0.6));
+  outline: none;
+}
+
+.milkdown-image-resize__caption-input:focus {
+  border-bottom-style: solid;
+  border-bottom-color: var(--color-primary, #3b82f6);
+  color: var(--color-foreground, inherit);
+}

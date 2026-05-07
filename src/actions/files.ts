@@ -1,7 +1,7 @@
 import { action } from "@solidjs/router";
-import { getServerHeaders } from "~/queries/auth.ts";
 import { auth } from "~/server/auth.ts";
 import * as filesService from "~/server/services/files.ts";
+import { getServerHeaders } from "~/server/session.ts";
 import { z } from "zod";
 
 const FileSchema = z.instanceof(File)

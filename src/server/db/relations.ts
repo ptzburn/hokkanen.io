@@ -6,6 +6,7 @@ import {
   twoFactors,
   users,
 } from "../db/schema/auth.ts";
+import { postImages, posts } from "../db/schema/blog.ts";
 
 export const relations = defineRelations(
   {
@@ -14,6 +15,8 @@ export const relations = defineRelations(
     accounts,
     twoFactors,
     passkeys,
+    posts,
+    postImages,
   },
   (r) => ({
     users: {
@@ -32,6 +35,10 @@ export const relations = defineRelations(
       passkeys: r.many.passkeys({
         from: r.users.id,
         to: r.passkeys.userId,
+      }),
+      posts: r.many.posts({
+        from: r.users.id,
+        to: r.posts.authorId,
       }),
     },
     sessions: {
@@ -56,6 +63,22 @@ export const relations = defineRelations(
       user: r.one.users({
         from: r.passkeys.userId,
         to: r.users.id,
+      }),
+    },
+    posts: {
+      author: r.one.users({
+        from: r.posts.authorId,
+        to: r.users.id,
+      }),
+      images: r.many.postImages({
+        from: r.posts.id,
+        to: r.postImages.postId,
+      }),
+    },
+    postImages: {
+      post: r.one.posts({
+        from: r.postImages.postId,
+        to: r.posts.id,
       }),
     },
   }),

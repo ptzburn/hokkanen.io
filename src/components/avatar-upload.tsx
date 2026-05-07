@@ -46,30 +46,8 @@ export function AvatarUpload(props: AvatarUploadProps): JSX.Element {
 
   const uploadAvatar = async (file: File) => {
     try {
-      const img = new Image();
-      img.src = URL.createObjectURL(file);
-      await new Promise((resolve) => (img.onload = resolve));
-
-      const width = Math.min(400, img.width);
-      const resized = await createImageBitmap(img, {
-        resizeWidth: width,
-      });
-      const canvas = new OffscreenCanvas(width, resized.height);
-      canvas.getContext("bitmaprenderer")?.transferFromImageBitmap(
-        resized,
-      );
-      const blob = await canvas.convertToBlob({
-        type: "image/webp",
-        quality: 0.85,
-      });
-
-      URL.revokeObjectURL(img.src);
-
       const formData = new FormData();
-      formData.append(
-        "file",
-        new File([blob], "avatar.webp", { type: "image/webp" }),
-      );
+      formData.append("file", file);
 
       await uploadImage(formData);
       revalidate(getSessionQuery.key);

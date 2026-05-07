@@ -1,14 +1,6 @@
 import { query, redirect } from "@solidjs/router";
 import { auth } from "~/server/auth.ts";
-import { getRequestEvent } from "solid-js/web";
-
-export function getServerHeaders(): Headers {
-  const event = getRequestEvent();
-  if (!event) {
-    throw new Error("No request event available");
-  }
-  return event.request.headers;
-}
+import { getServerHeaders } from "~/server/session.ts";
 
 export const getSessionQuery = query(async () => {
   "use server";
@@ -23,6 +15,13 @@ export const getSessionQuery = query(async () => {
 
   return session;
 }, "session");
+
+export const getOptionalSessionQuery = query(async () => {
+  "use server";
+  const headers = getServerHeaders();
+  const session = await auth.api.getSession({ headers });
+  return session ?? null;
+}, "optional-session");
 
 export const listSessionsQuery = query(async () => {
   "use server";

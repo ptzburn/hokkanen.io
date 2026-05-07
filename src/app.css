@@ -2,6 +2,7 @@
 
 @plugin "tailwindcss-animate";
 @plugin "@kobalte/tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (.dark &,[data-kb-theme="dark"] &);
 
@@ -125,6 +126,17 @@
   }
   h3 {
     @apply text-lg tracking-wide font-medium md:text-xl;
+  }
+
+  .prose figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .prose p:has(> img:only-child) {
+    text-align: center;
   }
 
   @media (max-width: 640px) {
@@ -292,4 +304,20 @@
     @apply ml-[-50px] mt-[-4px];
     content: counter(step);
   }
+}
+
+.prose figure {
+  width: fit-content;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.prose figcaption {
+  text-align: center;
+}
+
+.prose img {
+  margin-left: auto;
+  margin-right: auto;
 }

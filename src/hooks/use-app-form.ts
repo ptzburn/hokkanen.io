@@ -1,5 +1,6 @@
 import { createFormHook, createFormHookContexts } from "@tanstack/solid-form";
 
+import { MarkdownEditorField } from "~/components/form/markdown-editor-field.tsx";
 import { OTPFieldComponent as OTPField } from "~/components/form/otp-field.tsx";
 import { SelectField } from "~/components/form/select.tsx";
 import { SubmitButton } from "~/components/form/submit-button.tsx";
@@ -19,6 +20,7 @@ export const { useAppForm, withForm } = createFormHook({
     TextField,
     TextareaField,
     SelectField,
+    MarkdownEditorField,
   },
   formComponents: {
     SubmitButton,

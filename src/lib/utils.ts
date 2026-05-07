@@ -1,7 +1,6 @@
 import type { ClassValue } from "clsx";
 
 import { clsx } from "clsx";
-import { getRequestEvent } from "solid-js/web";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]): string {
@@ -39,10 +38,37 @@ export function getFileUrl(
   return `${import.meta.env.VITE_S3_PUBLIC_URL}/${fileKey}`;
 }
 
-export function getServerHeaders(): Headers {
-  const event = getRequestEvent();
-  if (!event) {
-    throw new Error("No request event available");
-  }
-  return event.request.headers;
+const VARIANT_URL_RE = /^(.+)-(\d+)\.webp$/;
+const RESPONSIVE_WIDTHS = [640, 1280, 2560];
+
+export type ImageResponsive = {
+  src: string;
+  srcset?: string;
+  sizes?: string;
+};
+
+export function getResponsiveImage(
+  fileKey: string | null | undefined,
+  sizes = "(max-width: 768px) 100vw, 768px",
+): ImageResponsive | undefined {
+  const src = getFileUrl(fileKey);
+  if (!src) return undefined;
+  const match = VARIANT_URL_RE.exec(src);
+  if (!match) return { src };
+  const base = match[1];
+  const masterWidth = Number(match[2]);
+  const widths = RESPONSIVE_WIDTHS.filter((w) => w < masterWidth);
+  widths.push(masterWidth);
+  const srcset = widths.map((w) => `${base}-${w}.webp ${w}w`).join(", ");
+  return { src, srcset, sizes };
+}
+
+export function slugify(input: string): string {
+  const cleaned = input
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-+|-+$)/g, "");
+  return cleaned.slice(0, 80).replace(/-+$/, "");
 }

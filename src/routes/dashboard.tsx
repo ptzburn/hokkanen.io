@@ -41,7 +41,7 @@ export default function DashboardLayout(props: RouteSectionProps): JSX.Element {
                   <AppSidebar />
                   <SidebarInset class="flex flex-1 flex-col overflow-hidden">
                     <MobileHeader />
-                    <main class="container flex min-h-0 flex-1 flex-col py-4 pb-20 md:py-8 md:pb-8">
+                    <main class="container flex min-h-0 flex-1 flex-col overflow-y-auto py-4 pb-20 md:py-8 md:pb-8">
                       {props.children}
                     </main>
                   </SidebarInset>

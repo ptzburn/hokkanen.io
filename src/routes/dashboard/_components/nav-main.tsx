@@ -7,6 +7,7 @@ import {
   SidebarMenuItem,
 } from "~/components/ui/sidebar.tsx";
 
+import BookOpen from "~icons/lucide/book-open";
 import House from "~icons/lucide/house";
 import { For, type JSX } from "solid-js";
 
@@ -18,6 +19,12 @@ const items = (
     url: "/dashboard",
     icon: House,
     isActive: pathname === "/dashboard",
+  },
+  {
+    title: "Blog",
+    url: "/dashboard/blog",
+    icon: BookOpen,
+    isActive: pathname.startsWith("/dashboard/blog"),
   },
 ];
 
@@ -32,9 +39,7 @@ export function NavMain(): JSX.Element {
             <Collapsible>
               <A href={item.url}>
                 <SidebarMenuItem
-                  class={item.url === location.pathname
-                    ? "bg-accent rounded"
-                    : ""}
+                  class={item.isActive ? "bg-accent rounded" : ""}
                 >
                   <SidebarMenuButton tooltip={item.title}>
                     <item.icon />
