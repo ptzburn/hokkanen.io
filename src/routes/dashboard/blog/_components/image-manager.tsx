@@ -13,6 +13,7 @@ import { Label } from "~/components/ui/label.tsx";
 import { Spinner } from "~/components/ui/spinner.tsx";
 import { getFileUrl } from "~/lib/utils.ts";
 import { getPostByIdQuery } from "~/queries/posts.ts";
+import type { postImages } from "~/server/db/schema/blog.ts";
 import Copy from "~icons/lucide/copy";
 import Star from "~icons/lucide/star";
 import Trash2 from "~icons/lucide/trash-2";
@@ -20,15 +21,10 @@ import Upload from "~icons/lucide/upload";
 import { createSignal, For, type JSX, Show } from "solid-js";
 import { toast } from "solid-sonner";
 
-type ImageRow = {
-  id: number;
-  s3Key: string;
-  alt: string | null;
-  width: number | null;
-  height: number | null;
-  isCover: boolean;
-  position: number;
-};
+type ImageRow = Pick<
+  typeof postImages.$inferSelect,
+  "id" | "s3Key" | "alt" | "width" | "height" | "isCover" | "position"
+>;
 
 type ImageManagerProps = {
   postId: number;

@@ -3,18 +3,13 @@ import { decode as decodePng } from "@jsquash/png";
 import resize from "@jsquash/resize";
 import { decode as decodeWebp, encode as encodeWebp } from "@jsquash/webp";
 
+import { SUPPORTED_IMAGE_MIME_TYPES } from "~/lib/schemas/files.ts";
+
 const MAX_DIMENSION = 2560;
 const WEBP_QUALITY = 90;
 const WEBP_METHOD = 6;
 
 const POST_IMAGE_VARIANT_WIDTHS = [640, 1280, MAX_DIMENSION] as const;
-
-const SUPPORTED_MIME_TYPES = new Set([
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-]);
 
 export type ImageVariant = {
   body: Uint8Array;
@@ -55,7 +50,7 @@ export async function normalizeToWebpVariants(
 
 async function decodeFile(file: File): Promise<ImageData> {
   const mime = file.type.toLowerCase();
-  if (!SUPPORTED_MIME_TYPES.has(mime)) {
+  if (!SUPPORTED_IMAGE_MIME_TYPES.has(mime)) {
     throw new Error(
       `Unsupported image format: ${mime || "unknown"}. Use JPEG, PNG, or WebP.`,
     );

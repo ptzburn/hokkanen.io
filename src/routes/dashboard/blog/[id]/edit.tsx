@@ -31,15 +31,7 @@ import {
 import { toast } from "solid-sonner";
 import { ImageManager } from "../_components/image-manager.tsx";
 
-type PostData = {
-  id: number;
-  slug: string;
-  title: string;
-  excerpt: string | null;
-  content: string;
-  status: "draft" | "published";
-  images: Parameters<typeof ImageManager>[0]["images"];
-};
+type PostData = NonNullable<Awaited<ReturnType<typeof getPostByIdQuery>>>;
 
 export default function EditPostRoute(): JSX.Element {
   const params = useParams<{ id: string }>();

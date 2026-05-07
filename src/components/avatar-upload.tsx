@@ -9,6 +9,7 @@ import {
 import { Button } from "~/components/ui/button.tsx";
 
 import { Spinner } from "~/components/ui/spinner.tsx";
+import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB } from "~/lib/schemas/files.ts";
 import { getFileUrl, getInitials } from "~/lib/utils.ts";
 import { getSessionQuery } from "~/queries/auth.ts";
 import Pencil from "~icons/lucide/pencil";
@@ -35,8 +36,8 @@ export function AvatarUpload(props: AvatarUploadProps): JSX.Element {
       const uploadFile = files?.[0];
       if (!uploadFile) return;
       const { file } = uploadFile;
-      if (file.size > 10 * 1024 * 1024) {
-        toast.error("Image is too large (max 10MB)");
+      if (file.size > MAX_UPLOAD_BYTES) {
+        toast.error(`Image is too large (max ${MAX_UPLOAD_MB}MB)`);
         clearFiles();
         return;
       }

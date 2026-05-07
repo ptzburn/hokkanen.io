@@ -1,4 +1,5 @@
 import { action } from "@solidjs/router";
+import { ImageFileSchema } from "~/lib/schemas/files.ts";
 import {
   CreatePostInput,
   ImageIdInput,
@@ -13,15 +14,7 @@ import { posts } from "~/server/db/schema/blog.ts";
 import * as postsService from "~/server/services/posts.ts";
 import { requireSession } from "~/server/session.ts";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
-
-const PostImageFileSchema = z.instanceof(File)
-  .refine((f) => f.size > 0, "File is empty")
-  .refine((f) => f.size <= 10 * 1024 * 1024, "File is too large (max 10MB)")
-  .refine(
-    (f) => f.type.startsWith("image/"),
-    "Only image files are allowed",
-  );
+import type { z } from "zod";
 
 export const createPostAction = action(
   async (
@@ -130,7 +123,7 @@ export const uploadPostImageAction = action(
       throw new Error("Invalid postId");
     }
 
-    const fileParsed = PostImageFileSchema.safeParse(formData.get("file"));
+    const fileParsed = ImageFileSchema.safeParse(formData.get("file"));
     if (!fileParsed.success) {
       throw new Error(firstIssue(fileParsed.error, "Invalid file"));
     }
