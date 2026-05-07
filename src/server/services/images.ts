@@ -7,7 +7,7 @@ const MAX_DIMENSION = 2560;
 const WEBP_QUALITY = 90;
 const WEBP_METHOD = 6;
 
-export const POST_IMAGE_VARIANT_WIDTHS = [640, 1280, MAX_DIMENSION] as const;
+const POST_IMAGE_VARIANT_WIDTHS = [640, 1280, MAX_DIMENSION] as const;
 
 const SUPPORTED_MIME_TYPES = new Set([
   "image/jpeg",

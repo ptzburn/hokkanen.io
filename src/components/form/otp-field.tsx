@@ -1,5 +1,5 @@
 // deno-lint-ignore-file jsx-key
-import { useFieldContext } from "~/hooks/use-app-form.ts";
+import { isFieldInvalid, useFieldContext } from "~/hooks/use-app-form.ts";
 
 import { type JSX, Show } from "solid-js";
 import { Field, FieldError, FieldLabel } from "../ui/field.tsx";
@@ -16,11 +16,9 @@ export function OTPFieldComponent(
   },
 ): JSX.Element {
   const field = useFieldContext<string>();
-  const isInvalid = () =>
-    field().state.meta.isTouched && !field().state.meta.isValid;
 
   return (
-    <Field data-invalid={isInvalid()}>
+    <Field data-invalid={isFieldInvalid(field)}>
       <Show when={label}>
         <FieldLabel
           for={field().name}
@@ -37,18 +35,19 @@ export function OTPFieldComponent(
             field().handleChange(cleaned);
           }}
           autofocus
-          aria-invalid={isInvalid()}
+          aria-invalid={isFieldInvalid(field)}
         >
           <OTPFieldGroup class="gap-2">
             {[0, 1, 2, 3, 4, 5].map((index) => <OTPFieldSlot index={index} />)}
           </OTPFieldGroup>
 
           <OTPFieldInput
-            disabled={false}
+            disabled={field().form.state.isSubmitting &&
+              field().form.state.isValid}
           />
         </OTPField>
       </div>
-      <Show when={isInvalid()}>
+      <Show when={isFieldInvalid(field)}>
         <FieldError errors={field().state.meta.errors} />
       </Show>
     </Field>

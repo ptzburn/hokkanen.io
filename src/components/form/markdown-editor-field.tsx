@@ -1,7 +1,7 @@
 import { Crepe } from "@milkdown/crepe";
 import "@milkdown/crepe/theme/common/style.css";
 import "@milkdown/crepe/theme/frame.css";
-import { useFieldContext } from "~/hooks/use-app-form.ts";
+import { isFieldInvalid, useFieldContext } from "~/hooks/use-app-form.ts";
 import "~/lib/milkdown/image-resize.css";
 import { imageResizePlugins } from "~/lib/milkdown/image-resize.ts";
 import { type JSX, onCleanup, onMount, Show } from "solid-js";
@@ -15,8 +15,6 @@ export function MarkdownEditorField(
   props: MarkdownEditorFieldProps,
 ): JSX.Element {
   const field = useFieldContext<string>();
-  const isInvalid = (): boolean =>
-    field().state.meta.isTouched && !field().state.meta.isValid;
 
   let editorEl: HTMLDivElement | undefined;
   let crepe: Crepe | undefined;
@@ -45,7 +43,7 @@ export function MarkdownEditorField(
   });
 
   return (
-    <Field data-invalid={isInvalid()}>
+    <Field data-invalid={isFieldInvalid(field)}>
       <Show when={props.label}>
         <FieldLabel for={field().name}>{props.label}</FieldLabel>
       </Show>
@@ -54,7 +52,7 @@ export function MarkdownEditorField(
         id={field().name}
         class="min-h-[400px] overflow-hidden rounded-md border bg-card"
       />
-      <Show when={isInvalid()}>
+      <Show when={isFieldInvalid(field)}>
         <FieldError errors={field().state.meta.errors} />
       </Show>
     </Field>

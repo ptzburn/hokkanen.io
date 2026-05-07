@@ -1,4 +1,4 @@
-import { useFieldContext } from "~/hooks/use-app-form.ts";
+import { isFieldInvalid, useFieldContext } from "~/hooks/use-app-form.ts";
 
 import { type JSX, Show } from "solid-js";
 import {
@@ -30,8 +30,6 @@ export function SelectField<T extends string | number = string | number>(
   },
 ): JSX.Element {
   const field = useFieldContext<T>();
-  const isInvalid = () =>
-    field().state.meta.isTouched && !field().state.meta.isValid;
 
   // Check if options are objects with value/label or primitives
   const isObjectOptions = options.length > 0 &&
@@ -55,7 +53,7 @@ export function SelectField<T extends string | number = string | number>(
   };
 
   return (
-    <Field orientation="vertical" data-invalid={isInvalid()}>
+    <Field orientation="vertical" data-invalid={isFieldInvalid(field)}>
       <FieldContent>
         <Show when={label}>
           <FieldLabel
@@ -84,7 +82,7 @@ export function SelectField<T extends string | number = string | number>(
       >
         <SelectTrigger
           id={field().name}
-          aria-invalid={isInvalid()}
+          aria-invalid={isFieldInvalid(field)}
           class="min-w-[10px]"
         >
           <SelectValue<T>>
@@ -93,7 +91,7 @@ export function SelectField<T extends string | number = string | number>(
         </SelectTrigger>
         <SelectContent />
       </Select>
-      <Show when={isInvalid()}>
+      <Show when={isFieldInvalid(field)}>
         <FieldError errors={field().state.meta.errors} />
       </Show>
     </Field>

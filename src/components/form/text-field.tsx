@@ -1,6 +1,6 @@
 import { Input } from "~/components/ui/input.tsx";
 
-import { useFieldContext } from "~/hooks/use-app-form.ts";
+import { isFieldInvalid, useFieldContext } from "~/hooks/use-app-form.ts";
 import { type JSX, Show } from "solid-js";
 import {
   Field,
@@ -19,8 +19,6 @@ export function TextField(
   },
 ): JSX.Element {
   const field = useFieldContext<string | number>();
-  const isInvalid = () =>
-    field().state.meta.isTouched && !field().state.meta.isValid;
 
   const handleChange = (e: Event & { currentTarget: HTMLInputElement }) => {
     const value = e.currentTarget.value;
@@ -45,7 +43,7 @@ export function TextField(
   };
 
   return (
-    <Field data-invalid={isInvalid()}>
+    <Field data-invalid={isFieldInvalid(field)}>
       <FieldContent>
         <Show when={label}>
           <FieldLabel for={field().name}>{label}</FieldLabel>
@@ -62,11 +60,11 @@ export function TextField(
         value={displayValue()}
         onBlur={field().handleBlur}
         onChange={handleChange}
-        aria-invalid={isInvalid()}
+        aria-invalid={isFieldInvalid(field)}
         disabled={field().form.state.isSubmitting &&
           field().form.state.isValid}
       />
-      <Show when={isInvalid()}>
+      <Show when={isFieldInvalid(field)}>
         <FieldError errors={field().state.meta.errors} />
       </Show>
     </Field>
