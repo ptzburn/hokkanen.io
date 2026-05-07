@@ -8,3 +8,13 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+declare global {
+  namespace App {
+    interface RequestEventLocals {
+      nonce: string;
+    }
+  }
+}
+
+export {};

@@ -31,6 +31,17 @@ export const auth = betterAuth({
       maxAge: 5 * 60,
     },
   },
+  rateLimit: {
+    enabled: true,
+    window: 60,
+    max: 100,
+    customRules: {
+      "/sign-in/email": { window: 60, max: 5 },
+      "/two-factor/verify-totp": { window: 60, max: 5 },
+      "/two-factor/verify-backup-code": { window: 60, max: 5 },
+      "/passkey/verify-authentication": { window: 60, max: 10 },
+    },
+  },
   account: {
     accountLinking: {
       enabled: false,
