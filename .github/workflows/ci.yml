@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.7
+
+      - name: Install dependencies
+        run: deno install
+
+      - name: Format, lint, type-check
+        run: deno task check
+
+      - name: Write build env
+        run: |
+          cat > .env.prod <<'EOF'
+          NODE_ENV=production
+          DATABASE_URL=http://localhost:8080
+          DATABASE_AUTH_TOKEN=ci
+          BETTER_AUTH_SECRET=ci_build_only_secret_value
+          BETTER_AUTH_URL=https://example.com
+          VITE_TURNSTILE_SITE_KEY=ci
+          VITE_TURNSTILE_SECRET_KEY=ci
+          VITE_HOST_URL=https://example.com
+          S3_REGION=us-east-1
+          S3_ENDPOINT=https://s3.example.com
+          S3_ACCESS_KEY=ci
+          S3_ACCESS_SECRET=ci
+          S3_BUCKET=ci
+          VITE_S3_PUBLIC_URL=https://cdn.example.com
+          EOF
+
+      - name: Build
+        run: deno task build
