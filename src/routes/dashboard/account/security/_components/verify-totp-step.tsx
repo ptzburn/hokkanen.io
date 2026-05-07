@@ -1,4 +1,4 @@
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import { type JSX, Show } from "solid-js";
 import { QRCodeSVG } from "solid-qr-code";
 
@@ -24,14 +24,7 @@ export function VerifyTotpStep(props: VerifyTotpStepProps): JSX.Element {
   }));
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      class="space-y-6"
-    >
+    <form onSubmit={submitForm(form)} class="space-y-6">
       <Show when={props.totpUri}>
         <div class="flex justify-center">
           <div class="rounded-lg bg-white p-3">

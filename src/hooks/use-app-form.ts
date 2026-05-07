@@ -14,6 +14,15 @@ type FieldAccessor = () => {
 export const isFieldInvalid = (field: FieldAccessor): boolean =>
   field().state.meta.isTouched && !field().state.meta.isValid;
 
+type FormSubmitter = { handleSubmit: () => void | Promise<void> };
+
+export const submitForm =
+  (form: FormSubmitter): (e: SubmitEvent) => void => (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    void form.handleSubmit();
+  };
+
 // Export contexts so components can use them
 export const { fieldContext, formContext, useFieldContext, useFormContext } =
   createFormHookContexts();

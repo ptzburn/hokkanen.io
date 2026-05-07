@@ -2,11 +2,7 @@ import { redirect } from "@solidjs/router";
 import { createMiddleware } from "@solidjs/start/middleware";
 import { auth } from "~/server/auth.ts";
 
-const PUBLIC_ROUTES = new Set([
-  "/auth/sign-in",
-  "/auth/forgot-password",
-  "/auth/reset-password",
-]);
+const PUBLIC_ROUTES = new Set(["/auth/sign-in"]);
 
 export default createMiddleware({
   onRequest: async (event) => {

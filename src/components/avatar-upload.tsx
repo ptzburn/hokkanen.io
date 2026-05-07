@@ -10,7 +10,7 @@ import { Button } from "~/components/ui/button.tsx";
 
 import { Spinner } from "~/components/ui/spinner.tsx";
 import { MAX_UPLOAD_BYTES, MAX_UPLOAD_MB } from "~/lib/schemas/files.ts";
-import { getFileUrl, getInitials } from "~/lib/utils.ts";
+import { errorMessage, getFileUrl, getInitials } from "~/lib/utils.ts";
 import { getSessionQuery } from "~/queries/auth.ts";
 import Pencil from "~icons/lucide/pencil";
 import { type JSX, Show } from "solid-js";
@@ -55,11 +55,7 @@ export function AvatarUpload(props: AvatarUploadProps): JSX.Element {
       toast.success("Profile picture updated");
       clearFiles();
     } catch (error) {
-      toast.error(
-        Error.isError(error)
-          ? error.message
-          : "Failed to update profile picture",
-      );
+      toast.error(errorMessage(error, "Failed to update profile picture"));
       clearFiles();
     }
   };

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table.tsx";
+import { errorMessage } from "~/lib/utils.ts";
 import { listAllPostsQuery } from "~/queries/posts.ts";
 import Plus from "~icons/lucide/plus";
 import Trash2 from "~icons/lucide/trash-2";
@@ -48,7 +49,7 @@ export default function BlogAdminRoute(): JSX.Element {
       toast.success("Published");
       await revalidate(listAllPostsQuery.key);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
     } finally {
       setBusy(null);
     }
@@ -63,7 +64,7 @@ export default function BlogAdminRoute(): JSX.Element {
       toast.success("Deleted");
       await revalidate(listAllPostsQuery.key);
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
     } finally {
       setBusy(null);
       setDeleteId(null);

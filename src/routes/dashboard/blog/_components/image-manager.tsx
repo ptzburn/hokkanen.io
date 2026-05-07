@@ -11,7 +11,7 @@ import { Button } from "~/components/ui/button.tsx";
 import { Input } from "~/components/ui/input.tsx";
 import { Label } from "~/components/ui/label.tsx";
 import { Spinner } from "~/components/ui/spinner.tsx";
-import { getFileUrl } from "~/lib/utils.ts";
+import { errorMessage, getFileUrl } from "~/lib/utils.ts";
 import { getPostByIdQuery } from "~/queries/posts.ts";
 import type { postImages } from "~/server/db/schema/blog.ts";
 import Copy from "~icons/lucide/copy";
@@ -67,7 +67,7 @@ export function ImageManager(props: ImageManagerProps): JSX.Element {
       );
       clearFiles();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Upload failed");
+      toast.error(errorMessage(err, "Upload failed"));
       clearFiles();
     }
   };
@@ -142,7 +142,7 @@ function ImageRow(props: {
       await fn();
       await props.onChange();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
     } finally {
       setBusy(false);
     }

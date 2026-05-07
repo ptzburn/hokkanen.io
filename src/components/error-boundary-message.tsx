@@ -1,4 +1,5 @@
 import { useNavigate } from "@solidjs/router";
+import { errorMessage } from "~/lib/utils.ts";
 import ArrowLeft from "~icons/lucide/arrow-left";
 import type { JSX } from "solid-js";
 import { Button } from "./ui/button.tsx";
@@ -22,15 +23,12 @@ export function ErrorBoundaryMessage(props: ErrorBoundaryProps): JSX.Element {
   const errorCode = Error.isError(props.error)
     ? (props.error.cause ? (props.error.cause as number) : 500)
     : 500;
-  const errorMessage = Error.isError(props.error)
-    ? props.error.message
-    : "Server Error";
   return (
     <Empty class="h-dvh bg-linear-to-b from-30% from-muted/50 to-background">
       <EmptyHeader>
         <EmptyTitle>{errorCode}</EmptyTitle>
         <EmptyDescription>
-          {errorMessage}
+          {errorMessage(props.error, "Server Error")}
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent>

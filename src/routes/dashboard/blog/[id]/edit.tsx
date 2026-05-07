@@ -16,8 +16,9 @@ import { ErrorBoundaryMessage } from "~/components/error-boundary-message.tsx";
 import { Badge } from "~/components/ui/badge.tsx";
 import { Button } from "~/components/ui/button.tsx";
 import { Spinner } from "~/components/ui/spinner.tsx";
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import { PostFormSchema, type PostFormValues } from "~/lib/schemas/posts.ts";
+import { errorMessage } from "~/lib/utils.ts";
 import { getPostByIdQuery, listAllPostsQuery } from "~/queries/posts.ts";
 import ExternalLink from "~icons/lucide/external-link";
 import Trash2 from "~icons/lucide/trash-2";
@@ -57,7 +58,7 @@ export default function EditPostRoute(): JSX.Element {
       toast.success("Published");
       await refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
     } finally {
       setBusy(false);
     }
@@ -74,7 +75,7 @@ export default function EditPostRoute(): JSX.Element {
       toast.success("Saved");
       await refresh();
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
     }
   };
 
@@ -86,7 +87,7 @@ export default function EditPostRoute(): JSX.Element {
       await revalidate(listAllPostsQuery.key);
       navigate("/dashboard/blog");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed");
+      toast.error(errorMessage(err, "Failed"));
       setBusy(false);
     }
   };
@@ -159,14 +160,7 @@ function EditView(props: {
   }));
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      class="flex flex-1 flex-col gap-6"
-    >
+    <form onSubmit={submitForm(form)} class="flex flex-1 flex-col gap-6">
       <div class="flex items-center gap-2">
         <h2>Edit</h2>
         <Badge

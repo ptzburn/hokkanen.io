@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button.tsx";
 
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import { authClient } from "~/lib/auth-client.ts";
 import { createSignal, type JSX, Match, Show, Switch } from "solid-js";
 import { toast } from "solid-sonner";
@@ -46,14 +46,7 @@ function TotpForm(props: {
           Enter the 6-digit code from your authenticator app.
         </p>
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
-        }}
-        class="grid gap-6"
-      >
+      <form onSubmit={submitForm(form)} class="grid gap-6">
         <form.AppField name="code">
           {(field) => <field.OTPField />}
         </form.AppField>
@@ -121,14 +114,7 @@ function BackupCodeForm(props: {
           authentication.
         </p>
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          form.handleSubmit();
-        }}
-        class="grid gap-6"
-      >
+      <form onSubmit={submitForm(form)} class="grid gap-6">
         <form.AppField name="code">
           {(field) => (
             <field.TextField

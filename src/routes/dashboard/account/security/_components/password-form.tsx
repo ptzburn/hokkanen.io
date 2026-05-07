@@ -1,6 +1,6 @@
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import type { JSX } from "solid-js";
-import z from "zod";
+import { z } from "zod";
 
 type PasswordFormProps = {
   submitLabel: string;
@@ -25,14 +25,7 @@ export function PasswordForm(props: PasswordFormProps): JSX.Element {
   }));
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      class="space-y-4"
-    >
+    <form onSubmit={submitForm(form)} class="space-y-4">
       <form.AppField name="password">
         {(field) => (
           <field.TextField

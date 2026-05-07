@@ -1,6 +1,7 @@
 import { A, useAction, useNavigate } from "@solidjs/router";
 import { createPostAction } from "~/actions/posts.ts";
 import { Button } from "~/components/ui/button.tsx";
+import { errorMessage } from "~/lib/utils.ts";
 import ChevronLeft from "~icons/lucide/chevron-left";
 import type { JSX } from "solid-js";
 import { toast } from "solid-sonner";
@@ -34,7 +35,7 @@ export default function NewPostRoute(): JSX.Element {
             toast.success("Draft created");
             navigate(`/dashboard/blog/${created.id}/edit`);
           } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Failed");
+            toast.error(errorMessage(err, "Failed"));
           }
         }}
       />

@@ -7,6 +7,13 @@ export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs));
 }
 
+export function errorMessage(
+  err: unknown,
+  fallback = "An error occurred",
+): string {
+  return Error.isError(err) ? err.message : fallback;
+}
+
 export function capitalize(str: string): string {
   return str
     .trim()

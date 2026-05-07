@@ -1,4 +1,4 @@
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import { PostFormSchema, type PostFormValues } from "~/lib/schemas/posts.ts";
 import type { JSX } from "solid-js";
 
@@ -24,14 +24,7 @@ export function PostForm(props: PostFormProps): JSX.Element {
   }));
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        form.handleSubmit();
-      }}
-      class="flex flex-col gap-6"
-    >
+    <form onSubmit={submitForm(form)} class="flex flex-col gap-6">
       <form.AppField name="title">
         {(field) => (
           <field.TextField

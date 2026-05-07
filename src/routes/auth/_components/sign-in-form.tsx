@@ -1,12 +1,11 @@
 import { Turnstile } from "@nerimity/solid-turnstile";
-import { A } from "@solidjs/router";
 import { Button } from "~/components/ui/button.tsx";
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 
 import { authClient } from "~/lib/auth-client.ts";
 import { createSignal, type JSX, Match, type Setter, Switch } from "solid-js";
 import { toast } from "solid-sonner";
-import z from "zod";
+import { z } from "zod";
 import { TwoFactorVerification } from "./two-factor-verification.tsx";
 
 const formSchema = z.object({
@@ -63,14 +62,7 @@ export default function SignInForm(props: SignInFormProps): JSX.Element {
         />
       </Match>
       <Match when={step() === "credentials"}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            form.handleSubmit();
-          }}
-          class="space-y-6"
-        >
+        <form onSubmit={submitForm(form)} class="space-y-6">
           <div class="grid gap-6">
             <form.AppField name="email">
               {(field) => (
@@ -82,20 +74,10 @@ export default function SignInForm(props: SignInFormProps): JSX.Element {
             </form.AppField>
             <form.AppField name="password">
               {(field) => (
-                <div class="space-y-2">
-                  <div class="flex items-center">
-                    <A
-                      href="/auth/forgot-password"
-                      class="ml-auto text-sm underline-offset-4 hover:underline"
-                    >
-                      Forgot Password
-                    </A>
-                  </div>
-                  <field.TextField
-                    type="password"
-                    placeholder="Enter your password"
-                  />
-                </div>
+                <field.TextField
+                  type="password"
+                  placeholder="Enter your password"
+                />
               )}
             </form.AppField>
             <div class="flex justify-center">

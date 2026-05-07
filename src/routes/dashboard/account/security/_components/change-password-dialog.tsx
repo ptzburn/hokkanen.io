@@ -1,12 +1,12 @@
 import { revalidateLogic } from "@tanstack/solid-form";
 import { ResponsiveEditDialog } from "~/components/responsive-edit-dialog.tsx";
 import { Button } from "~/components/ui/button.tsx";
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 
 import { authClient } from "~/lib/auth-client.ts";
 import { createSignal, type JSX } from "solid-js";
 import { toast } from "solid-sonner";
-import z from "zod";
+import { z } from "zod";
 
 export function ChangePasswordDialog(): JSX.Element {
   const [open, setOpen] = createSignal(false);
@@ -86,14 +86,7 @@ export function ChangePasswordDialog(): JSX.Element {
         description="Update your account password"
       >
         {() => (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              form.handleSubmit();
-            }}
-            class="space-y-4"
-          >
+          <form onSubmit={submitForm(form)} class="space-y-4">
             <form.AppField name="currentPassword">
               {(field) => (
                 <field.TextField

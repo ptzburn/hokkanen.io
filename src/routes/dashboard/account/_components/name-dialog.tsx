@@ -2,12 +2,12 @@ import { revalidate } from "@solidjs/router";
 import { revalidateLogic } from "@tanstack/solid-form";
 import { ResponsiveEditDialog } from "~/components/responsive-edit-dialog.tsx";
 import { Button } from "~/components/ui/button.tsx";
-import { useAppForm } from "~/hooks/use-app-form.ts";
+import { submitForm, useAppForm } from "~/hooks/use-app-form.ts";
 import { authClient } from "~/lib/auth-client.ts";
 import { getSessionQuery } from "~/queries/auth.ts";
 import { createSignal, type JSX } from "solid-js";
 import { toast } from "solid-sonner";
-import z from "zod";
+import { z } from "zod";
 
 type NameEditDialogProps = {
   currentName: string;
@@ -74,14 +74,7 @@ export function NameEditDialog(props: NameEditDialogProps): JSX.Element {
         title="Edit name"
       >
         {() => (
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              form.handleSubmit();
-            }}
-            class="space-y-4"
-          >
+          <form onSubmit={submitForm(form)} class="space-y-4">
             <div class="grid gap-4 md:grid-cols-2">
               <form.AppField name="firstName">
                 {(field) => (
