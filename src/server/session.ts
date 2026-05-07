@@ -9,9 +9,12 @@ export function getServerHeaders(): Headers {
   return event.request.headers;
 }
 
-export async function requireSession(): Promise<{ userId: number }> {
+export async function requireSession(): Promise<{
+  userId: number;
+  headers: Headers;
+}> {
   const headers = getServerHeaders();
   const session = await auth.api.getSession({ headers });
   if (!session) throw new Error("Unauthorized");
-  return { userId: Number(session.user.id) };
+  return { userId: Number(session.user.id), headers };
 }

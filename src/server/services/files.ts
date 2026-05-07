@@ -23,9 +23,30 @@ const client = new S3Client({
   responseChecksumValidation: "WHEN_REQUIRED",
 });
 
+async function deleteByPrefix(prefix: string): Promise<void> {
+  const { Contents } = await client.send(
+    new ListObjectsCommand({ Bucket: env.S3_BUCKET, Prefix: prefix }),
+  );
+  if (!Contents || Contents.length === 0) return;
+  await Promise.all(
+    Contents.flatMap((object) =>
+      object.Key
+        ? [
+          client.send(
+            new DeleteObjectCommand({
+              Bucket: env.S3_BUCKET,
+              Key: object.Key,
+            }),
+          ),
+        ]
+        : []
+    ),
+  );
+}
+
 export async function uploadUserAvatar(
   file: File,
-  userId: string,
+  userId: number,
 ): Promise<string> {
   const image = await normalizeToWebp(file);
 
@@ -50,34 +71,8 @@ export async function uploadUserAvatar(
   return fileKey;
 }
 
-export async function removeUserAvatar(
-  userId: string,
-): Promise<void> {
-  const prefix = `users/${userId}/avatar/`;
-
-  const listCommand = new ListObjectsCommand({
-    Bucket: env.S3_BUCKET,
-    Prefix: prefix,
-  });
-
-  const { Contents } = await client.send(listCommand);
-
-  if (!Contents || Contents.length === 0) {
-    return;
-  }
-
-  await Promise.all(
-    Contents.map((object) => {
-      if (!object.Key) return Promise.resolve();
-
-      const deleteCommand = new DeleteObjectCommand({
-        Bucket: env.S3_BUCKET,
-        Key: object.Key,
-      });
-
-      return client.send(deleteCommand);
-    }),
-  );
+export async function removeUserAvatar(userId: number): Promise<void> {
+  await deleteByPrefix(`users/${userId}/avatar/`);
 }
 
 export type PostImageUploadResult = {
@@ -124,53 +119,9 @@ export async function deletePostImageFile(s3Key: string): Promise<void> {
     );
     return;
   }
-
-  const { Contents } = await client.send(
-    new ListObjectsCommand({
-      Bucket: env.S3_BUCKET,
-      Prefix: `${baseKey}-`,
-    }),
-  );
-
-  if (!Contents || Contents.length === 0) return;
-
-  await Promise.all(
-    Contents.map((object) => {
-      if (!object.Key) return Promise.resolve();
-      return client.send(
-        new DeleteObjectCommand({
-          Bucket: env.S3_BUCKET,
-          Key: object.Key,
-        }),
-      );
-    }),
-  );
+  await deleteByPrefix(`${baseKey}-`);
 }
 
-export async function deleteAllPostImageFiles(
-  postId: number,
-): Promise<void> {
-  const prefix = `posts/${postId}/`;
-
-  const listCommand = new ListObjectsCommand({
-    Bucket: env.S3_BUCKET,
-    Prefix: prefix,
-  });
-
-  const { Contents } = await client.send(listCommand);
-
-  if (!Contents || Contents.length === 0) {
-    return;
-  }
-
-  await Promise.all(
-    Contents.map((object) => {
-      if (!object.Key) return Promise.resolve();
-      const deleteCommand = new DeleteObjectCommand({
-        Bucket: env.S3_BUCKET,
-        Key: object.Key,
-      });
-      return client.send(deleteCommand);
-    }),
-  );
+export async function deleteAllPostImageFiles(postId: number): Promise<void> {
+  await deleteByPrefix(`posts/${postId}/`);
 }

@@ -7,6 +7,7 @@ import {
   UpdatePostImageAltInput,
   UpdatePostInput,
 } from "~/lib/schemas/posts.ts";
+import { firstIssue } from "~/lib/schemas/utils.ts";
 import db from "~/server/db/index.ts";
 import { posts } from "~/server/db/schema/blog.ts";
 import * as postsService from "~/server/services/posts.ts";
@@ -30,9 +31,7 @@ export const createPostAction = action(
     const { userId } = await requireSession();
 
     const parsed = CreatePostInput.safeParse(input);
-    if (!parsed.success) {
-      throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
-    }
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     const slug = await postsService.generateUniqueSlug(parsed.data.title);
 
@@ -56,9 +55,7 @@ export const updatePostAction = action(
     await requireSession();
 
     const parsed = UpdatePostInput.safeParse(input);
-    if (!parsed.success) {
-      throw new Error(parsed.error.issues[0]?.message ?? "Invalid input");
-    }
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     const { id, title, content, excerpt } = parsed.data;
     const updates: Partial<typeof posts.$inferInsert> = {};
@@ -89,7 +86,7 @@ export const deletePostAction = action(
     await requireSession();
 
     const parsed = PostIdInput.safeParse(input);
-    if (!parsed.success) throw new Error("Invalid input");
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     await postsService.deletePostWithCleanup(parsed.data.id);
   },
@@ -102,7 +99,7 @@ export const publishPostAction = action(
     await requireSession();
 
     const parsed = PostIdInput.safeParse(input);
-    if (!parsed.success) throw new Error("Invalid input");
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     const existing = await db.query.posts.findFirst({
       where: { id: parsed.data.id },
@@ -135,7 +132,7 @@ export const uploadPostImageAction = action(
 
     const fileParsed = PostImageFileSchema.safeParse(formData.get("file"));
     if (!fileParsed.success) {
-      throw new Error(fileParsed.error.issues[0]?.message ?? "Invalid file");
+      throw new Error(firstIssue(fileParsed.error, "Invalid file"));
     }
 
     const altRaw = formData.get("alt");
@@ -154,7 +151,7 @@ export const deletePostImageAction = action(
     await requireSession();
 
     const parsed = ImageIdInput.safeParse(input);
-    if (!parsed.success) throw new Error("Invalid input");
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     await postsService.deletePostImage(parsed.data.id);
   },
@@ -167,7 +164,7 @@ export const setPostCoverAction = action(
     await requireSession();
 
     const parsed = SetPostCoverInput.safeParse(input);
-    if (!parsed.success) throw new Error("Invalid input");
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     await postsService.setCoverImage(parsed.data.postId, parsed.data.imageId);
   },
@@ -180,7 +177,7 @@ export const updatePostImageAltAction = action(
     await requireSession();
 
     const parsed = UpdatePostImageAltInput.safeParse(input);
-    if (!parsed.success) throw new Error("Invalid input");
+    if (!parsed.success) throw new Error(firstIssue(parsed.error));
 
     await postsService.updatePostImageAlt(parsed.data.id, parsed.data.alt);
   },
