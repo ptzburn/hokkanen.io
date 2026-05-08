@@ -9,10 +9,19 @@ import { TextareaField } from "~/components/form/textarea-field.tsx";
 
 type FieldAccessor = () => {
   state: { meta: { isTouched: boolean; isValid: boolean } };
+  form: { state: { submissionAttempts: number } };
 };
 
-export const isFieldInvalid = (field: FieldAccessor): boolean =>
-  field().state.meta.isTouched && !field().state.meta.isValid;
+// A field is shown as invalid once it's been touched OR the form has been
+// submitted at least once. Without the submission-attempt clause, fields that
+// can't naturally fire blur (e.g. the markdown editor) never surface their
+// error after a failed submit, leaving the user with a button that does
+// nothing.
+export const isFieldInvalid = (field: FieldAccessor): boolean => {
+  const meta = field().state.meta;
+  if (meta.isValid) return false;
+  return meta.isTouched || field().form.state.submissionAttempts > 0;
+};
 
 type FormSubmitter = { handleSubmit: () => void | Promise<void> };
 

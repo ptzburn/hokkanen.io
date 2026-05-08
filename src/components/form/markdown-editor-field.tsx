@@ -36,6 +36,22 @@ export function MarkdownEditorField(
       });
     });
     void crepe.create();
+
+    // Milkdown's listener plugin debounces markdownUpdated by 200ms, so a fast
+    // submit can race ahead of the trailing keystrokes and validate stale (or
+    // empty) form state. Sync the editor's current markdown into the field on
+    // the form's submit event in capture phase, before the form-level handler
+    // runs validation.
+    const formEl = editorEl.closest("form");
+    if (formEl) {
+      const flush = (): void => {
+        if (crepe) field().handleChange(crepe.getMarkdown());
+      };
+      formEl.addEventListener("submit", flush, { capture: true });
+      onCleanup(() => {
+        formEl.removeEventListener("submit", flush, { capture: true });
+      });
+    }
   });
 
   onCleanup(() => {
