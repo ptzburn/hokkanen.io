@@ -13,23 +13,52 @@ export function SiteHeader(): JSX.Element {
   return (
     <header class="sticky top-0 z-50 border-b bg-background/80 backdrop-blur-sm">
       <div class="mx-auto flex h-14 items-center justify-between px-6">
-        <nav class="flex items-center gap-1">
+        <div class="flex items-center gap-4">
           <A
             href="/"
             end
-            class={navLinkClass}
-            activeClass={navLinkActiveClass}
+            aria-label="hokkanen.io home"
+            class="inline-flex items-center font-semibold text-base text-foreground tracking-tighter"
           >
-            Main
+            <span>hokkanen</span>
+            <svg
+              viewBox="0 0 56 56"
+              width="14"
+              height="14"
+              aria-hidden="true"
+              class="mx-px block"
+            >
+              <circle
+                cx="28"
+                cy="28"
+                r="26"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                opacity="0.55"
+              />
+              <circle cx="28" cy="28" r="12" fill="currentColor" />
+            </svg>
+            <span class="font-medium text-muted-foreground">io</span>
           </A>
-          <A
-            href="/blog"
-            class={navLinkClass}
-            activeClass={navLinkActiveClass}
-          >
-            Blog
-          </A>
-        </nav>
+          <nav class="flex items-center gap-1">
+            <A
+              href="/"
+              end
+              class={navLinkClass}
+              activeClass={navLinkActiveClass}
+            >
+              Main
+            </A>
+            <A
+              href="/blog"
+              class={navLinkClass}
+              activeClass={navLinkActiveClass}
+            >
+              Blog
+            </A>
+          </nav>
+        </div>
         <div class="flex items-center gap-2">
           <Suspense fallback={null}>
             <Show when={session()?.user}>

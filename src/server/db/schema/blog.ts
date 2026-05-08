@@ -42,6 +42,7 @@ export const posts = sqliteTable(
     title: text().notNull(),
     excerpt: text(),
     content: text().notNull(),
+    wordCount: integer({ mode: "number" }).notNull().default(0),
     status: text({ enum: ["draft", "published"] })
       .notNull()
       .default("draft"),
