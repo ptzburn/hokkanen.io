@@ -11,6 +11,24 @@ import { defineConfig } from "vite";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
+// Vite's HMR WebSocket throws BrokenPipe / ConnectionReset as unhandled
+// promise rejections on Deno when the page disconnects abruptly (Playwright
+// closes pages between tests). The errors are noise — the WS would have been
+// torn down anyway — but Deno treats unhandled rejections as fatal and the
+// dev server dies, taking the rest of the suite with it. Swallow them here.
+if (process.env.E2E === "true" && typeof addEventListener === "function") {
+  addEventListener("unhandledrejection", (event) => {
+    const msg = String(
+      (event as PromiseRejectionEvent).reason instanceof Error
+        ? (event as PromiseRejectionEvent).reason.message
+        : (event as PromiseRejectionEvent).reason,
+    );
+    if (msg.includes("Broken pipe") || msg.includes("Connection reset")) {
+      event.preventDefault();
+    }
+  });
+}
+
 export default defineConfig({
   root: import.meta.dirname,
   cacheDir: "node_modules/.vite",
