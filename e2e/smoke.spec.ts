@@ -18,12 +18,15 @@ test("/auth/sign-in shows the heading and primary actions", async ({ page }) => 
 });
 
 test("'Continue with email' reveals the email and password fields", async ({ page }) => {
-  await page.goto("/auth/sign-in", { waitUntil: "networkidle" });
-  const emailButton = page.getByRole("button", { name: /continue with email/i });
-  await emailButton.click();
-  await expect(page.locator('input[type="email"]')).toBeVisible({
-    timeout: 15_000,
-  });
+  await page.goto("/auth/sign-in");
+  // The click handler is attached only after Solid hydrates, so retry the
+  // click until the email input becomes visible.
+  await expect(async () => {
+    await page.getByRole("button", { name: /continue with email/i }).click();
+    await expect(page.locator('input[type="email"]')).toBeVisible({
+      timeout: 1_000,
+    });
+  }).toPass({ timeout: 30_000 });
   await expect(page.locator('input[type="password"]')).toBeVisible();
 });
 
