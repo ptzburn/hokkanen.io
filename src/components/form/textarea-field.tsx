@@ -29,7 +29,7 @@ export function TextareaField(
         rows={rows}
         value={field().state.value}
         onBlur={field().handleBlur}
-        onChange={(e: Event & { currentTarget: HTMLTextAreaElement }) =>
+        onInput={(e: Event & { currentTarget: HTMLTextAreaElement }) =>
           field().handleChange(e.currentTarget.value)}
         aria-invalid={isFieldInvalid(field)}
         class="min-h-[120px]"
