@@ -23,7 +23,7 @@ export default defineConfig({
   },
   server: {
     watch: {
-      ignored: ["**/local.db*", "**/docker-data/**"],
+      ignored: ["**/local.db*", "**/e2e.db*", "**/docker-data/**"],
     },
   },
   test: {
