@@ -20,11 +20,7 @@ export function TextField(
 ): JSX.Element {
   const field = useFieldContext<string | number>();
 
-  // Solid's `onChange` maps to the native DOM change event, which only fires
-  // on blur. That's a footgun for both real users (state lags actual typing)
-  // and for Playwright's `fill()`, which sets value + input but never blurs.
-  // Use `onInput` so state stays in sync on every keystroke.
-  const handleInput = (e: Event & { currentTarget: HTMLInputElement }) => {
+  const handleChange = (e: Event & { currentTarget: HTMLInputElement }) => {
     const value = e.currentTarget.value;
     if (type === "number") {
       // Convert string to number for number inputs
@@ -63,7 +59,7 @@ export function TextField(
         placeholder={placeholder}
         value={displayValue()}
         onBlur={field().handleBlur}
-        onInput={handleInput}
+        onChange={handleChange}
         aria-invalid={isFieldInvalid(field)}
         disabled={field().form.state.isSubmitting &&
           field().form.state.isValid}

@@ -36,7 +36,13 @@ test("create draft → publish → public visibility → delete", async ({ page 
   });
 
   await test.step("fill the form and create the draft", async () => {
-    await page.getByLabel("Title").fill(POST_TITLE);
+    // TextField's onChange listens to the DOM change event, which only fires
+    // on blur. Playwright's fill() never blurs, so press Tab to force the
+    // form-state update before submitting. (Locally a follow-up click happens
+    // to blur first, but slow CI hydration makes that race unreliable.)
+    const titleInput = page.getByLabel("Title");
+    await titleInput.fill(POST_TITLE);
+    await titleInput.press("Tab");
 
     // Crepe renders a ProseMirror contenteditable; fill() bypasses its
     // transaction pipeline so type the content via the keyboard instead.
