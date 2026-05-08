@@ -22,6 +22,10 @@ export default defineConfig({
     },
   },
   server: {
+    // HMR's WebSocket throws BrokenPipe/ConnectionReset as unhandled rejections
+    // on Deno when the page disconnects abruptly (Playwright closes pages
+    // between tests), and the dev server dies. We don't need HMR for E2E.
+    hmr: process.env.E2E === "true" ? false : undefined,
     watch: {
       ignored: ["**/local.db*", "**/e2e.db*", "**/docker-data/**"],
     },
