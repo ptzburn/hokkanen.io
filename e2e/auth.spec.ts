@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { TEST_USER } from "./setup/seed.ts";
 
 test("sign in with seeded credentials lands on the dashboard", async ({ page }) => {
-  await page.goto("/auth/sign-in", { waitUntil: "networkidle" });
+  await page.goto("/auth/sign-in");
   await page.getByRole("button", { name: /continue with email/i }).click();
 
   await page.getByPlaceholder(/enter your email/i).fill(TEST_USER.email);
@@ -19,7 +19,7 @@ test("sign in with seeded credentials lands on the dashboard", async ({ page }) 
 
 test("/auth/sign-out terminates the session and redirects to sign-in", async ({ page }) => {
   // Sign in first
-  await page.goto("/auth/sign-in", { waitUntil: "networkidle" });
+  await page.goto("/auth/sign-in");
   await page.getByRole("button", { name: /continue with email/i }).click();
   await page.getByPlaceholder(/enter your email/i).fill(TEST_USER.email);
   await page.getByPlaceholder(/enter your password/i).fill(TEST_USER.password);
@@ -30,7 +30,7 @@ test("/auth/sign-out terminates the session and redirects to sign-in", async ({ 
   await expect(page).toHaveURL(/\/dashboard\/?$/, { timeout: 15_000 });
 
   // Sign out
-  await page.goto("/auth/sign-out", { waitUntil: "networkidle" });
+  await page.goto("/auth/sign-out");
   await expect(page).toHaveURL(/\/auth\/sign-in/, { timeout: 15_000 });
 
   // Re-confirm session is gone: dashboard now redirects to sign-in

@@ -18,7 +18,7 @@ test("/auth/sign-in shows the heading and primary actions", async ({ page }) => 
 });
 
 test("'Continue with email' reveals the email and password fields", async ({ page }) => {
-  await page.goto("/auth/sign-in", { waitUntil: "networkidle" });
+  await page.goto("/auth/sign-in");
   const emailButton = page.getByRole("button", { name: /continue with email/i });
   await emailButton.click();
   await expect(page.locator('input[type="email"]')).toBeVisible({
