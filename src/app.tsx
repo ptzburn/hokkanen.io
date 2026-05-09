@@ -1,3 +1,7 @@
+import "@fontsource/space-grotesk/400.css";
+import "@fontsource/space-grotesk/500.css";
+import "@fontsource/space-grotesk/600.css";
+import "@fontsource/space-grotesk/700.css";
 import {
   ColorModeProvider,
   ColorModeScript,
@@ -5,11 +9,11 @@ import {
 } from "@kobalte/core";
 import { MetaProvider } from "@solidjs/meta";
 import { Router } from "@solidjs/router";
+
 import { getCookie } from "@solidjs/start/http";
 import { FileRoutes } from "@solidjs/start/router";
 import { Toaster } from "~/components/ui/sonner.tsx";
 import { type JSX, Suspense } from "solid-js";
-
 import { isServer } from "solid-js/web";
 import "./app.css";
 
