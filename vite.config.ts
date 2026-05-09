@@ -63,6 +63,25 @@ export default defineConfig({
   build: {
     target: "esnext",
   },
+  // Pre-bundle the heavy editor deps at server startup so they don't
+  // re-trigger Vite's optimize cycle mid-test on cold CI runners. Without
+  // this, lazy imports from /dashboard/blog/{new,[id]/edit} discover Crepe +
+  // its prosemirror chunks late, Vite re-optimizes, and any in-flight
+  // server-action / query request stalls until that finishes — surfacing as
+  // a 15s+ spinner on the edit page right after Create Draft.
+  optimizeDeps: {
+    include: [
+      "@milkdown/crepe",
+      "@milkdown/crepe/theme/common/style.css",
+      "@milkdown/crepe/theme/frame.css",
+      "@milkdown/ctx",
+      "@milkdown/prose",
+      "@milkdown/prose/state",
+      "@milkdown/prose/view",
+      "@milkdown/prose/model",
+      "@milkdown/utils",
+    ],
+  },
   plugins: [
     tailwindcss(),
     solidStart({
