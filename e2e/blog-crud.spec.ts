@@ -56,7 +56,11 @@ test("create draft → publish → public visibility → delete", async ({ page 
     await expect(page).toHaveURL(/\/dashboard\/blog\/\d+\/edit$/, {
       timeout: 15_000,
     });
-    await expect(page.getByText("draft", { exact: true })).toBeVisible();
+    // Edit page mounts → createAsync(getPostByIdQuery) → server roundtrip →
+    // badge renders. On a cold CI runner this regularly exceeds 5s.
+    await expect(page.getByText("draft", { exact: true })).toBeVisible({
+      timeout: 15_000,
+    });
   });
 
   await test.step("publish the draft", async () => {
