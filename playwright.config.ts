@@ -12,6 +12,10 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: process.env.CI ? "github" : "list",
+  // CI runners hit cold-start hydration costs that chew through the 30s default
+  // on multi-step flows like blog-crud. 60s gives every step real headroom
+  // without masking persistent failures.
+  timeout: 60_000,
   globalSetup: "./e2e/global-setup.ts",
   use: {
     baseURL: BASE_URL,
