@@ -22,13 +22,7 @@ import { errorMessage } from "~/lib/utils.ts";
 import { getPostByIdQuery, listAllPostsQuery } from "~/queries/posts.ts";
 import ExternalLink from "~icons/lucide/external-link";
 import Trash2 from "~icons/lucide/trash-2";
-import {
-  createSignal,
-  ErrorBoundary,
-  type JSX,
-  Show,
-  Suspense,
-} from "solid-js";
+import { createSignal, ErrorBoundary, type JSX, Show } from "solid-js";
 import { toast } from "solid-sonner";
 import { ImageManager } from "../_components/image-manager.tsx";
 
@@ -97,7 +91,16 @@ export default function EditPostRoute(): JSX.Element {
       <ErrorBoundary
         fallback={(error) => <ErrorBoundaryMessage error={error} />}
       >
-        <Suspense
+        {
+          /* Two Shows in series instead of Suspense: createAsync returns
+            undefined while loading and null when the post genuinely isn't
+            found. Suspense's resolve path hits a solid-js race in 1.9.12
+            where Effects is null when resumeEffects runs after async data
+            loads outside an update batch (TypeError: Cannot read properties
+            of null (reading 'push')); CI Linux trips this consistently. */
+        }
+        <Show
+          when={post() !== undefined}
           fallback={
             <div class="flex flex-1 items-center justify-center">
               <Spinner class="size-10" />
@@ -122,7 +125,7 @@ export default function EditPostRoute(): JSX.Element {
               />
             )}
           </Show>
-        </Suspense>
+        </Show>
       </ErrorBoundary>
 
       <ConfirmationDialog
