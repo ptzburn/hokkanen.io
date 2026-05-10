@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
-import { index, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { index, integer, snakeCase, text } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable("users", {
+export const users = snakeCase.table("users", {
   id: integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
   name: text().notNull(),
   email: text().notNull().unique(),
@@ -20,7 +20,7 @@ export const users = sqliteTable("users", {
     .notNull(),
 });
 
-export const sessions = sqliteTable(
+export const sessions = snakeCase.table(
   "sessions",
   {
     id: integer({ mode: "number" }).primaryKey({
@@ -43,7 +43,7 @@ export const sessions = sqliteTable(
   (table) => [index("sessions_userId_idx").on(table.userId)],
 );
 
-export const accounts = sqliteTable(
+export const accounts = snakeCase.table(
   "accounts",
   {
     id: integer({ mode: "number" }).primaryKey({
@@ -75,7 +75,7 @@ export const accounts = sqliteTable(
   (table) => [index("accounts_userId_idx").on(table.userId)],
 );
 
-export const verifications = sqliteTable(
+export const verifications = snakeCase.table(
   "verifications",
   {
     id: integer({ mode: "number" }).primaryKey({
@@ -95,7 +95,7 @@ export const verifications = sqliteTable(
   (table) => [index("verifications_identifier_idx").on(table.identifier)],
 );
 
-export const twoFactors = sqliteTable(
+export const twoFactors = snakeCase.table(
   "two_factors",
   {
     id: integer({ mode: "number" }).primaryKey({
@@ -114,7 +114,7 @@ export const twoFactors = sqliteTable(
   ],
 );
 
-export const passkeys = sqliteTable(
+export const passkeys = snakeCase.table(
   "passkeys",
   {
     id: integer({ mode: "number" }).primaryKey({

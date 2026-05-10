@@ -5,7 +5,6 @@ import { relations } from "./relations.ts";
 import * as schema from "./schema/index.ts";
 
 const drizzleConfig = {
-  casing: "snake_case" as const,
   schema,
   relations,
 };
