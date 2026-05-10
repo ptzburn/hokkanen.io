@@ -3,13 +3,13 @@ import {
   check,
   index,
   integer,
-  sqliteTable,
+  snakeCase,
   text,
   uniqueIndex,
 } from "drizzle-orm/sqlite-core";
 import { users } from "./auth.ts";
 
-export const postImages = sqliteTable(
+export const postImages = snakeCase.table(
   "post_images",
   {
     id: integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
@@ -34,7 +34,7 @@ export const postImages = sqliteTable(
   ],
 );
 
-export const posts = sqliteTable(
+export const posts = snakeCase.table(
   "posts",
   {
     id: integer({ mode: "number" }).primaryKey({ autoIncrement: true }),
@@ -42,6 +42,7 @@ export const posts = sqliteTable(
     title: text().notNull(),
     excerpt: text(),
     content: text().notNull(),
+    wordCount: integer({ mode: "number" }).notNull().default(0),
     status: text({ enum: ["draft", "published"] })
       .notNull()
       .default("draft"),

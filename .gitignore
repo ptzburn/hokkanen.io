@@ -8,7 +8,7 @@ dist
 .claude
 vite.config.ts.timestamp-*.mjs
 
-# Environment — .env.e2e is committed (test-only keys, no real secrets)
+# Environment
 .env
 .env.prod
 .env*.local
@@ -19,12 +19,6 @@ vite.config.ts.timestamp-*.mjs
 
 ## Local DB
 local.db*
-e2e.db*
-
-## Playwright
-/test-results/
-/playwright-report/
-/playwright/.cache/
 
 # IDEs and editors
 /.idea

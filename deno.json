@@ -2,7 +2,6 @@
   "nodeModulesDir": "manual",
   "tasks": {
     "dev:app": "deno run --allow-env --allow-sys --allow-ffi --env-file --allow-net --allow-read --allow-write --allow-run vite --port 3028",
-    "dev:e2e": "deno run --allow-env --allow-sys --allow-ffi --env-file=.env.e2e --allow-net --allow-read --allow-write --allow-run vite --port 3029",
     "build": "deno run --allow-env --allow-read --allow-sys --allow-run --allow-ffi --env-file=.env.prod --allow-write vite build",
     "dev": "concurrently \"deno task dev:app\" \"docker compose up\"",
     "start": "deno run --allow-net --allow-read --allow-write --allow-ffi --allow-env --env-file=.env.prod --allow-sys ./.output/server/index.mjs",
@@ -13,9 +12,7 @@
     "db-prod:studio": "deno -A --node-modules-dir --env-file=.env.prod drizzle-kit studio --port 8000",
     "check": "deno fmt ./src/ && deno lint ./src/ && deno check ./src/",
     "test": "deno -A --node-modules-dir vitest run",
-    "test:watch": "deno -A --node-modules-dir vitest",
-    "test:e2e": "./node_modules/.bin/playwright test",
-    "test:e2e:install": "./node_modules/.bin/playwright install --with-deps chromium"
+    "test:watch": "deno -A --node-modules-dir vitest"
   },
   "lint": {
     "rules": {
@@ -82,7 +79,6 @@
     "@kobalte/core": "npm:@kobalte/core@^0.13.11",
     "@kobalte/tailwindcss": "npm:@kobalte/tailwindcss@^0.9.0",
     "@libsql/client": "npm:@libsql/client@^0.17.3",
-    "@playwright/test": "npm:@playwright/test@^1.56.1",
     "@solidjs/meta": "npm:@solidjs/meta@^0.29.4",
     "@solidjs/router": "npm:@solidjs/router@^0.16.1",
     "@solidjs/start": "npm:@solidjs/start@^2.0.0-alpha.2",
@@ -98,8 +94,8 @@
     "clsx": "npm:clsx@^2.1.1",
     "cmdk-solid": "npm:cmdk-solid@^1.1.2",
     "concurrently": "npm:concurrently@^9.2.1",
-    "drizzle-kit": "npm:drizzle-kit@^1.0.0-beta.22",
-    "drizzle-orm": "npm:drizzle-orm@^1.0.0-beta.22",
+    "drizzle-kit": "npm:drizzle-kit@^1.0.0-rc.2",
+    "drizzle-orm": "npm:drizzle-orm@^1.0.0-rc.2",
     "drizzle-zod": "npm:drizzle-zod@^0.8.3",
     "embla-carousel-solid": "npm:embla-carousel-solid@^8.6.0",
     "happy-dom": "npm:happy-dom@^20.0.5",

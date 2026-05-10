@@ -1,11 +1,12 @@
 import { query } from "@solidjs/router";
 import { renderMarkdown } from "~/lib/markdown.ts";
+import { readingMinutes } from "~/lib/reading-time.ts";
 import db from "~/server/db/index.ts";
 import { requireSession } from "~/server/session.ts";
 
 export const getPublishedPostsQuery = query(async () => {
   "use server";
-  return await db.query.posts.findMany({
+  const rows = await db.query.posts.findMany({
     where: {
       status: "published",
       publishedAt: { lte: new Date() },
@@ -16,6 +17,7 @@ export const getPublishedPostsQuery = query(async () => {
       slug: true,
       title: true,
       excerpt: true,
+      wordCount: true,
       publishedAt: true,
       createdAt: true,
       updatedAt: true,
@@ -31,6 +33,10 @@ export const getPublishedPostsQuery = query(async () => {
       },
     },
   });
+  return rows.map(({ wordCount, ...rest }) => ({
+    ...rest,
+    readingMinutes: readingMinutes(wordCount),
+  }));
 }, "blog-posts");
 
 export const getPostBySlugQuery = query(async (slug: string) => {
@@ -47,6 +53,7 @@ export const getPostBySlugQuery = query(async (slug: string) => {
       title: true,
       excerpt: true,
       content: true,
+      wordCount: true,
       publishedAt: true,
       createdAt: true,
       updatedAt: true,
@@ -79,6 +86,7 @@ export const getPostBySlugQuery = query(async (slug: string) => {
     createdAt: post.createdAt,
     updatedAt: post.updatedAt,
     contentHtml,
+    readingMinutes: readingMinutes(post.wordCount),
     images: post.images,
   };
 }, "blog-post");
