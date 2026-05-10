@@ -1,4 +1,5 @@
 import { action } from "@solidjs/router";
+import { countWords } from "~/lib/reading-time.ts";
 import { ImageFileSchema } from "~/lib/schemas/files.ts";
 import {
   CreatePostInput,
@@ -32,6 +33,7 @@ export const createPostAction = action(
       slug,
       title: parsed.data.title,
       content: parsed.data.content,
+      wordCount: countWords(parsed.data.content),
       excerpt: parsed.data.excerpt ?? null,
       status: "draft",
       authorId: userId,
@@ -52,7 +54,10 @@ export const updatePostAction = action(
 
     const { id, title, content, excerpt } = parsed.data;
     const updates: Partial<typeof posts.$inferInsert> = {};
-    if (content !== undefined) updates.content = content;
+    if (content !== undefined) {
+      updates.content = content;
+      updates.wordCount = countWords(content);
+    }
     if (excerpt !== undefined) updates.excerpt = excerpt;
 
     if (title !== undefined) {
